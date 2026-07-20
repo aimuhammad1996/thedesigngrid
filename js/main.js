@@ -49,6 +49,12 @@
   var lastY = window.scrollY;
   var ticking = false;
 
+  function updateNavHeight() {
+    if (nav) root.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+  }
+  updateNavHeight();
+  window.addEventListener('resize', updateNavHeight);
+
   function onScroll() {
     var y = window.scrollY;
     if (nav) {
@@ -86,6 +92,7 @@
     document.body.classList.remove('no-scroll');
   }
   function openMobile() {
+    updateNavHeight();
     mobilePanel.classList.add('is-open');
     navToggle.setAttribute('aria-expanded', 'true');
     document.body.classList.add('no-scroll');
@@ -97,6 +104,9 @@
     });
     mobilePanel.querySelectorAll('a').forEach(function (a) {
       a.addEventListener('click', closeMobile);
+    });
+    mobilePanel.addEventListener('click', function (e) {
+      if (e.target === mobilePanel) closeMobile();
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeMobile();
