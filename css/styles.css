@@ -627,7 +627,7 @@ section { position: relative; }
 
 .weave-divider {
   height: clamp(90px, 11vw, 150px);
-  background: url('../assets/weave-band.svg') center / cover no-repeat;
+  background: url('../assets/weave-band.jpg') center / cover no-repeat;
 }
 
 .marquee {
