@@ -67,8 +67,8 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="top">
-    <div class="wrap hero-inner">
-      <div data-reveal>
+    <div class="wrap hero-grid">
+      <div class="hero-copy" data-reveal>
         <p class="eyebrow hero-kicker no-rule">Senior Product Designer — Banking, Platforms &amp; Startups</p>
         <h1 class="hero-headline text-balance">I design for startups that let the design do the talking.</h1>
         <div class="hero-actions">
@@ -83,11 +83,17 @@
         </div>
         <p class="hero-meta-line"><span>Toronto, Canada</span><span>5+ years in product design</span><span>Open to new opportunities</span></p>
       </div>
-      <a class="hero-scrollcue" href="#about">
-        Scroll to explore
-        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v9M4 8.5 8 12l4-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+      <figure class="hero-portrait" data-reveal style="transition-delay:120ms;">
+        <span class="portrait-fallback" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M8 29V11l12 13 12-13v18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="11" r="3" fill="var(--c-accent)"/></svg>
+        </span>
+        <img src="assets/portrait.jpg" alt="Muhammad Shahid, Senior Product Designer" fetchpriority="high" onerror="this.style.display='none'">
+      </figure>
     </div>
+    <a class="hero-scrollcue" href="#about">
+      Scroll to explore
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v9M4 8.5 8 12l4-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </section>
 
   <div class="marquee" aria-label="Companies Muhammad has worked with">
@@ -125,6 +131,9 @@
         </div>
 
         <aside data-reveal style="transition-delay:120ms;">
+          <figure class="about-portrait">
+            <img src="assets/portrait.jpg" alt="Muhammad Shahid in a studio portrait" loading="lazy" onerror="this.parentElement.style.display='none'">
+          </figure>
           <div class="stat-card">
             <div class="stat-grid">
               <div>
@@ -153,8 +162,10 @@
     </div>
   </section>
 
+  <div class="weave-divider" aria-hidden="true"></div>
+
   <!-- ============ FEATURED CASE STUDIES ============ -->
-  <section class="section-pad" id="work" style="padding-top:0;">
+  <section class="section-pad" id="work">
     <div class="wrap">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Featured case studies</p>
@@ -469,6 +480,8 @@
       </div>
     </div>
   </section>
+
+  <div class="weave-divider" aria-hidden="true"></div>
 
   <!-- ============ CONTACT / GET IN TOUCH ============ -->
   <section class="section-pad" id="contact">
