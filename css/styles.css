@@ -92,7 +92,6 @@
   --g-text: linear-gradient(105deg, #1A1509 0%, #8A6414 55%, #C9992E 100%);
   --g-contact: linear-gradient(135deg, #14100A 0%, #3A2E12 55%, #7A5A18 100%);
   --hero-bg: linear-gradient(160deg, #F6EFDD 0%, #FBF6EA 100%);
-  --weave-url: url('../assets/weave-light.svg');
   --weave-opacity: 0.5;
   --c-glow-1: rgba(230, 190, 90, 0.26);
   --c-glow-2: rgba(200, 150, 40, 0.14);
@@ -118,7 +117,6 @@
   --g-text: linear-gradient(105deg, #F5EAC8 0%, #F0CB5E 50%, #D9A63A 100%);
   --g-contact: linear-gradient(135deg, #12100A 0%, #3A2E12 55%, #6E5216 100%);
   --hero-bg: radial-gradient(1100px 700px at 62% 38%, #241C0E 0%, #120E07 55%, #080604 100%);
-  --weave-url: url('../assets/weave-dark.svg');
   --weave-opacity: 0.55;
   --c-glow-1: rgba(232, 184, 75, 0.20);
   --c-glow-2: rgba(200, 150, 40, 0.12);
@@ -145,7 +143,6 @@
     --g-text: linear-gradient(105deg, #F5EAC8 0%, #F0CB5E 50%, #D9A63A 100%);
     --g-contact: linear-gradient(135deg, #12100A 0%, #3A2E12 55%, #6E5216 100%);
     --hero-bg: radial-gradient(1100px 700px at 62% 38%, #241C0E 0%, #120E07 55%, #080604 100%);
-    --weave-url: url('../assets/weave-dark.svg');
     --weave-opacity: 0.55;
     --c-glow-1: rgba(232, 184, 75, 0.20);
     --c-glow-2: rgba(200, 150, 40, 0.12);
@@ -505,15 +502,34 @@ section { position: relative; }
   position: relative;
   overflow: hidden;
 }
-.hero::before {
-  content: '';
+/* Animated hero weave — two interleaved strand groups drift in opposite
+   directions, crossing through each other (converge → shimmer at center →
+   diverge) and back, on a slow ambient loop. Colors adapt per theme. */
+.hero-weave {
+  --wv1: #9A6E12; --wv2: #B4841E; --wv3: #7A5A18; --wv4: #C9992E;
   position: absolute;
   inset: 0;
-  background: var(--weave-url) center / cover no-repeat;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--weave-opacity);
   -webkit-mask: radial-gradient(62% 72% at 27% 48%, transparent 26%, #000 72%);
   mask: radial-gradient(62% 72% at 27% 48%, transparent 26%, #000 72%);
-  opacity: var(--weave-opacity);
   pointer-events: none;
+}
+:root[data-theme='dark'] .hero-weave { --wv1: #F0CB5E; --wv2: #E8D9A8; --wv3: #C9922A; --wv4: #F5E4B0; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .hero-weave { --wv1: #F0CB5E; --wv2: #E8D9A8; --wv3: #C9922A; --wv4: #F5E4B0; }
+}
+.hero-weave .wv-a { animation: weave-drift-a 17s var(--ease-in-out) infinite; will-change: transform; }
+.hero-weave .wv-b { animation: weave-drift-b 17s var(--ease-in-out) infinite; will-change: transform; }
+@keyframes weave-drift-a {
+  0%, 100% { transform: translate(-92px, -11px); }
+  50%      { transform: translate( 92px,  11px); }
+}
+@keyframes weave-drift-b {
+  0%, 100% { transform: translate( 92px,  11px); }
+  50%      { transform: translate(-92px, -11px); }
 }
 .hero::after {
   content: '';
@@ -988,7 +1004,7 @@ section { position: relative; }
   .hero-copy { align-items: center; }
   .hero-actions { justify-content: center; }
   .hero-portrait { max-width: 400px; }
-  .hero::before {
+  .hero-weave {
     -webkit-mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
     mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
   }
