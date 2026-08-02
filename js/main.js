@@ -49,6 +49,12 @@
   var lastY = window.scrollY;
   var ticking = false;
 
+  /* Hero weave scroll-direction: tiny, threshold-gated, only writes to the
+     DOM when direction actually flips — piggybacks on the existing
+     rAF-throttled scroll loop below rather than adding a second listener. */
+  var scrollDir = 'up';
+  var SCROLL_DIR_THRESHOLD = 4;
+
   function updateNavHeight() {
     if (nav) root.style.setProperty('--nav-h', nav.offsetHeight + 'px');
   }
@@ -57,6 +63,14 @@
 
   function onScroll() {
     var y = window.scrollY;
+    var dy = y - lastY;
+    if (Math.abs(dy) > SCROLL_DIR_THRESHOLD) {
+      var dir = dy > 0 ? 'down' : 'up';
+      if (dir !== scrollDir) {
+        scrollDir = dir;
+        root.setAttribute('data-scroll-dir', dir);
+      }
+    }
     if (nav) {
       nav.classList.toggle('is-scrolled', y > 8);
       if (y > lastY && y > 160) {
