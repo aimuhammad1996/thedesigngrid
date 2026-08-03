@@ -89,7 +89,6 @@
   --c-accent: #9A6E12;
   --c-accent-ink: #FFFBF0;
   --c-accent-soft: #F2E4C0;
-  --c-emerald: #0F6B4F;
   --c-focus: #6E4E0A;
   --c-overlay: rgba(26, 21, 9, 0.5);
   --c-nav-bg: rgba(250, 247, 239, 0.78);
@@ -120,7 +119,6 @@
   --c-accent: #E8B84B;
   --c-accent-ink: #1A1408;
   --c-accent-soft: #2A2010;
-  --c-emerald: #2FD9A8;
   --c-focus: #F0CB5E;
   --c-overlay: rgba(6, 4, 2, 0.65);
   --c-nav-bg: rgba(11, 9, 6, 0.72);
@@ -150,7 +148,6 @@
     --c-accent: #E8B84B;
     --c-accent-ink: #1A1408;
     --c-accent-soft: #2A2010;
-    --c-emerald: #2FD9A8;
     --c-focus: #F0CB5E;
     --c-overlay: rgba(6, 4, 2, 0.65);
     --c-nav-bg: rgba(11, 9, 6, 0.72);
@@ -468,7 +465,7 @@ section { position: relative; }
   position: absolute;
   left: 0; bottom: -1px;
   height: 2px;
-  background: linear-gradient(90deg, var(--c-accent), var(--c-emerald));
+  background: var(--c-accent);
   width: 0%;
 }
 
@@ -528,8 +525,8 @@ section { position: relative; }
    read as large, sweeping lines rather than a busy pattern. A radial mask
    keeps a clear pocket behind the headline (left column) while the weave
    stays bold across the rest of the hero, including behind the portrait.
-   One of every four strands renders in emerald: gold carries the motif,
-   emerald threads through it. The whole field scales a hair on scroll
+   All-gold strands, three tonal shades cycling through the bundle, for a
+   quiet, monochrome-luxe feel. The whole field scales a hair on scroll
    direction (see main.js). */
 .hero-weave {
   position: absolute;
@@ -549,7 +546,7 @@ section { position: relative; }
 
 .hero-weave-svg {
   --wv1: var(--weave-gold-1); --wv2: var(--weave-gold-2);
-  --wv3: var(--weave-gold-3); --wv4: var(--c-emerald);
+  --wv3: var(--weave-gold-3); --wv4: var(--weave-gold-2);
   width: 100%;
   height: 100%;
   display: block;
@@ -705,7 +702,6 @@ section { position: relative; }
 }
 .marquee-item strong { color: var(--c-ink-soft); font-weight: 600; }
 .marquee-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--c-border-strong); }
-.marquee-item .dot:nth-of-type(3n) { background: var(--c-emerald); opacity: 0.6; }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 
 /* ---------- 9. Reveal animation ----------
@@ -856,7 +852,6 @@ section { position: relative; }
 }
 .process-list .process-item:last-child { border-bottom: 1px solid var(--c-border); }
 .process-num { font-family: var(--font-mono); font-size: var(--fs-body-m); color: var(--c-accent); }
-.process-item:nth-child(even) .process-num { color: var(--c-emerald); }
 .process-content { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
 .process-content h3 { transition: transform var(--dur-base) var(--ease-premium); }
 .process-item:hover .process-content h3 { transform: translateX(6px); }
@@ -891,7 +886,6 @@ section { position: relative; }
 }
 .logo-cell svg { height: 22px; width: auto; color: var(--c-ink-faint); transition: color var(--dur-base); }
 .logo-cell:hover svg { color: var(--c-ink); }
-.logo-cell:nth-child(even):hover svg { color: var(--c-emerald); }
 
 .credibility-copy .about-list { margin-top: var(--space-6); }
 
@@ -982,7 +976,6 @@ section { position: relative; }
 .footer-bottom .text-xs { display: flex; gap: var(--space-5); flex-wrap: wrap; }
 .back-to-top { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
 .back-to-top svg { width: 14px; height: 14px; transition: transform var(--dur-base) var(--ease-premium); }
-.back-to-top:hover { color: var(--c-emerald); }
 .back-to-top:hover svg { transform: translateY(-3px); }
 
 /* ---------- 18. Case study detail page ---------- */
@@ -1008,7 +1001,6 @@ section { position: relative; }
 .cs-cols .cs-col { padding-top: var(--space-5); border-top: 1px solid var(--c-border); }
 .cs-cols .cs-col h4 { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
 .cs-cols .cs-col h4 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); flex-shrink: 0; }
-.cs-cols .cs-col:nth-child(even) h4 .dot { background: var(--c-emerald); }
 .cs-image { margin-top: var(--space-7); border-radius: var(--radius-l); overflow: hidden; background: var(--c-bg-sunken); }
 .cs-image svg { width: 100%; height: auto; display: block; }
 .cs-image figcaption { padding-top: var(--space-4); font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
@@ -1019,7 +1011,6 @@ section { position: relative; }
 .cs-list { display: grid; gap: var(--space-3); margin-top: var(--space-5); }
 .cs-list li { display: flex; gap: var(--space-3); align-items: flex-start; font-size: var(--fs-body-m); color: var(--c-ink-soft); }
 .cs-list li svg { width: 16px; height: 16px; margin-top: 4px; flex-shrink: 0; color: var(--c-accent); }
-.cs-list li:nth-child(even) svg { color: var(--c-emerald); }
 
 .cs-next { padding-block: var(--space-9); border-top: 1px solid var(--c-border); }
 .cs-next a { display: grid; gap: var(--space-2); }
