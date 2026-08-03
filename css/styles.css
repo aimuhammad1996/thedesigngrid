@@ -520,26 +520,28 @@ section { position: relative; }
   position: relative;
   overflow: hidden;
 }
-/* ---------- Hero background animation: horizontal pipeline ----------
-   A slim full-width band along the top of the hero — not a full-bleed
-   background — so it never sits behind the headline/body copy. Restores
-   the earlier converging/diverging arc-bundle motion (two strand groups
-   drifting in opposite directions, transform-only) inside that band, with
-   one of every four strands rendered in emerald: gold carries the motif,
-   emerald threads through it — the plaid hue pairing made literal. The
-   whole band scales a hair on scroll direction (see main.js). */
+/* ---------- Hero background animation: enlarged full-bleed weave ----------
+   The converging/diverging arc-bundle motion (two strand groups drifting in
+   opposite directions, transform-only) fills the entire hero as an oversized
+   backdrop — the flat, wide SVG art gets scaled up well past 1:1 by the
+   preserveAspectRatio "slice" fit against the taller hero box, so the arcs
+   read as large, sweeping lines rather than a busy pattern. A radial mask
+   keeps a clear pocket behind the headline (left column) while the weave
+   stays bold across the rest of the hero, including behind the portrait.
+   One of every four strands renders in emerald: gold carries the motif,
+   emerald threads through it. The whole field scales a hair on scroll
+   direction (see main.js). */
 .hero-weave {
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: clamp(120px, 15vw, 190px);
+  inset: 0;
   z-index: 0;
   overflow: hidden;
   opacity: var(--weave-opacity);
-  -webkit-mask: linear-gradient(#000 55%, transparent 100%);
-  mask: linear-gradient(#000 55%, transparent 100%);
+  -webkit-mask: radial-gradient(62% 72% at 27% 48%, transparent 26%, #000 72%);
+  mask: radial-gradient(62% 72% at 27% 48%, transparent 26%, #000 72%);
   pointer-events: none;
   transform: scale(var(--weave-scale-tight));
-  transform-origin: top center;
+  transform-origin: center;
   transition: transform var(--weave-scale-dur) var(--ease-out);
   will-change: transform;
 }
@@ -669,11 +671,7 @@ section { position: relative; }
 @media (prefers-reduced-motion: reduce) { .hero-scrollcue svg { animation: none; } }
 
 @media (max-width: 780px) {
-  /* The pipeline band sits below the fixed nav on mobile (nav height varies
-     with wrapping), not at the very top — otherwise the nav bar hides it
-     entirely. Hero padding grows to match so text never crowds it. */
-  .hero { min-height: auto; padding-top: max(clamp(6.5rem, 16vw, 8rem), calc(var(--nav-h, 5rem) + 56px + var(--space-4))); }
-  .hero-weave { top: var(--nav-h, 5rem); height: 56px; }
+  .hero { min-height: auto; padding-top: max(clamp(6.5rem, 16vw, 8rem), calc(var(--nav-h, 5rem) + var(--space-7))); }
 }
 
 .weave-divider {
@@ -1045,6 +1043,10 @@ section { position: relative; }
   .hero-copy { align-items: center; }
   .hero-actions { justify-content: center; }
   .hero-portrait { max-width: 400px; }
+  .hero-weave {
+    -webkit-mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
+    mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
+  }
   .case-body { grid-template-columns: 1fr; }
   .case-visual { order: -1; aspect-ratio: 16/10; }
   .case-card { grid-template-columns: 40px 1fr; }
