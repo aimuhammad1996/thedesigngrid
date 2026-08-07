@@ -196,37 +196,37 @@
     });
   }
 
-  /* ---------- Hero bento parallax (desktop, motion-respecting) ----------
+  /* ---------- Hero mosaic parallax (desktop, motion-respecting) ----------
      Tiles drift a few pixels toward the cursor, scaled per-tile by
      data-depth, on a single rAF-throttled listener over the whole group. */
-  var bentoGroup = document.querySelector('[data-parallax-group]');
-  if (bentoGroup && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
-    var bentoTiles = Array.prototype.slice.call(bentoGroup.querySelectorAll('.bento-tile'));
-    var bentoTicking = false;
-    var bentoClientX = 0;
-    var bentoClientY = 0;
-    function applyBentoParallax() {
-      var rect = bentoGroup.getBoundingClientRect();
-      var px = (bentoClientX - rect.left) / rect.width - 0.5;
-      var py = (bentoClientY - rect.top) / rect.height - 0.5;
-      bentoTiles.forEach(function (tile) {
+  var heroMosaic = document.querySelector('[data-parallax-group]');
+  if (heroMosaic && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    var heroTiles = Array.prototype.slice.call(heroMosaic.querySelectorAll('.hero-tile'));
+    var mosaicTicking = false;
+    var mosaicClientX = 0;
+    var mosaicClientY = 0;
+    function applyMosaicParallax() {
+      var rect = heroMosaic.getBoundingClientRect();
+      var px = (mosaicClientX - rect.left) / rect.width - 0.5;
+      var py = (mosaicClientY - rect.top) / rect.height - 0.5;
+      heroTiles.forEach(function (tile) {
         var depth = parseFloat(tile.getAttribute('data-depth')) || 0.5;
-        var tx = (px * depth * 22).toFixed(2);
-        var ty = (py * depth * 16).toFixed(2);
+        var tx = (px * depth * 18).toFixed(2);
+        var ty = (py * depth * 14).toFixed(2);
         tile.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
       });
-      bentoTicking = false;
+      mosaicTicking = false;
     }
-    bentoGroup.addEventListener('mousemove', function (e) {
-      bentoClientX = e.clientX;
-      bentoClientY = e.clientY;
-      if (!bentoTicking) {
-        window.requestAnimationFrame(applyBentoParallax);
-        bentoTicking = true;
+    heroMosaic.addEventListener('mousemove', function (e) {
+      mosaicClientX = e.clientX;
+      mosaicClientY = e.clientY;
+      if (!mosaicTicking) {
+        window.requestAnimationFrame(applyMosaicParallax);
+        mosaicTicking = true;
       }
     });
-    bentoGroup.addEventListener('mouseleave', function () {
-      bentoTiles.forEach(function (tile) { tile.style.transform = ''; });
+    heroMosaic.addEventListener('mouseleave', function () {
+      heroTiles.forEach(function (tile) { tile.style.transform = ''; });
     });
   }
 
