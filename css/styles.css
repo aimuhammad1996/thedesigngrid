@@ -282,6 +282,9 @@ h4, .h4 {
 section { position: relative; }
 .section-pad { padding-block: var(--space-section); }
 .section-pad-tight { padding-block: var(--space-section-tight); }
+/* A quiet tonal shift — same trick as the hero's bg-sunken — used sparingly
+   to mark a section as its own chapter rather than another block in a row. */
+.section-tonal { background: var(--c-bg-sunken); }
 .section-head {
   display: flex;
   flex-direction: column;
@@ -761,22 +764,9 @@ section { position: relative; }
 }
 .pull-quote cite { display: block; margin-top: var(--space-4); font-family: var(--font-mono); font-style: normal; font-size: var(--fs-body-xs); color: var(--c-ink-faint); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
 
-/* ---------- 11. Case studies (featured) ---------- */
-.case-list { display: flex; flex-direction: column; }
-.case-card {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: var(--space-6);
-  padding-block: var(--space-8);
-  border-top: 1px solid var(--c-border);
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-}
-.case-list .case-card:last-child { border-bottom: 1px solid var(--c-border); }
-.case-index { font-family: var(--font-mono); font-size: var(--fs-body-s); color: var(--c-ink-faint); padding-top: var(--space-1); }
-.case-body { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-8); align-items: center; }
-.case-copy .case-tags { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-bottom: var(--space-4); }
+/* ---------- 11. Case studies (featured) ----------
+   Editorial hierarchy: one lead case study at full weight, three supporting
+   cards at a deliberately smaller scale — not four identical rows. */
 .tag {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -784,60 +774,96 @@ section { position: relative; }
   text-transform: uppercase;
   color: var(--c-ink-faint);
 }
+.case-tags,
+.archive-row .tags { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .case-tags .tag:not(:last-child)::after,
 .process-detail .tag:not(:last-child)::after,
-.archive-card .tags .tag:not(:last-child)::after {
+.archive-row .tags .tag:not(:last-child)::after {
   content: '·';
   margin-left: var(--space-2);
   color: var(--c-border-strong);
 }
-.case-copy h3 { transition: color var(--dur-base) var(--ease-premium); }
-.case-card:hover .case-copy h3 { color: var(--c-accent); }
-.case-copy p { margin-top: var(--space-3); max-width: 48ch; }
 .case-meta { margin-top: var(--space-5); display: flex; gap: var(--space-6); flex-wrap: wrap; }
 .case-meta div dt { font-family: var(--font-mono); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--c-ink-faint); }
 .case-meta div dd { margin-top: var(--space-1); font-weight: 600; font-size: var(--fs-body-s); }
 .case-cta { margin-top: var(--space-6); }
 
-.case-visual {
-  aspect-ratio: 5/4;
+/* Lead case study — full weight, panoramic visual, largest headline in the section */
+.case-lead {
+  display: grid;
+  grid-template-columns: 1fr 0.95fr;
+  gap: var(--space-9);
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: var(--space-9);
+  margin-bottom: var(--space-9);
+  border-bottom: 1px solid var(--c-border);
+}
+.case-lead-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: var(--space-5);
+}
+.case-lead .case-tags { margin-bottom: var(--space-4); }
+.case-lead h3 { font-size: var(--fs-display-s); max-width: 16ch; transition: color var(--dur-base) var(--ease-premium); }
+.case-lead:hover h3 { color: var(--c-accent); }
+.case-lead p.text-l { margin-top: var(--space-4); max-width: 46ch; }
+.case-lead-visual {
+  aspect-ratio: 6/5;
   border-radius: var(--radius-l);
   overflow: hidden;
-  position: relative;
   background: var(--c-bg-sunken);
 }
-.case-visual svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
-.case-card:hover .case-visual svg { transform: scale(1.045); }
+.case-lead-visual svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-lead:hover .case-lead-visual svg { transform: scale(1.035); }
 
-@media (min-width: 900px) {
-  .case-card { padding-block: var(--space-9); }
+/* Supporting case studies — compact 3-up, clearly lighter weight than the lead */
+.case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+.case-card-compact { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.case-compact-visual {
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--c-bg-sunken);
+  margin-bottom: var(--space-5);
 }
+.case-compact-visual svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-card-compact:hover .case-compact-visual svg { transform: scale(1.045); }
+.case-card-compact .case-index { font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
+.case-card-compact .case-tags { margin-top: var(--space-3); }
+.case-card-compact h4 { margin-top: var(--space-3); font-size: var(--fs-body-l); transition: color var(--dur-base) var(--ease-premium); }
+.case-card-compact:hover h4 { color: var(--c-accent); }
+.case-card-compact .case-meta-compact { margin-top: var(--space-3); font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
+.case-card-compact .case-cta { margin-top: var(--space-4); }
 
-/* ---------- 12. Selected work archive ---------- */
-.archive-grid {
-  display: flex;
-  flex-direction: column;
-}
-.archive-card {
+/* ---------- 12. Selected work archive ----------
+   Deliberately dense and text-led — no illustrative thumbnails — so it
+   reads as secondary to the featured work above, not another card grid. */
+.archive-list { display: flex; flex-direction: column; }
+.archive-row {
   display: grid;
-  grid-template-columns: 132px 1fr;
-  column-gap: var(--space-6);
-  padding-block: var(--space-6);
+  grid-template-columns: 1fr auto;
+  column-gap: var(--space-4);
+  row-gap: var(--space-2);
+  padding-block: var(--space-4);
   border-top: 1px solid var(--c-border);
-  transition: padding var(--dur-base) var(--ease-premium);
 }
-.archive-grid .archive-card:last-child { border-bottom: 1px solid var(--c-border); }
-.archive-thumb { grid-row: 1 / span 3; aspect-ratio: 16/10; border-radius: var(--radius-m); overflow: hidden; background: var(--c-bg-sunken); align-self: start; }
-.archive-thumb svg { width: 100%; height: 100%; }
-.archive-card h4 { display: flex; justify-content: space-between; gap: var(--space-3); align-items: baseline; transition: color var(--dur-base) var(--ease-premium); }
-.archive-card h4 span.yr { font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); font-weight: 400; }
-.archive-card .role { margin-top: var(--space-2); font-size: var(--fs-body-s); color: var(--c-ink-faint); }
-.archive-card .tags { margin-top: var(--space-3); display: flex; gap: var(--space-2); flex-wrap: wrap; }
-.archive-card:hover h4 span:first-child { color: var(--c-accent); }
+.archive-list .archive-row:last-child { border-bottom: 1px solid var(--c-border); }
+.archive-row-name { font-weight: 600; transition: color var(--dur-base) var(--ease-premium); }
+.archive-row:hover .archive-row-name { color: var(--c-accent); }
+.archive-row-yr { font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); justify-self: end; align-self: baseline; }
+.archive-row-role { grid-column: 1 / -1; font-size: var(--fs-body-s); color: var(--c-ink-faint); max-width: 62ch; }
+.archive-row .tags { grid-column: 1 / -1; }
 
-@media (max-width: 640px) {
-  .archive-card { grid-template-columns: 1fr; }
-  .archive-thumb { grid-row: auto; margin-bottom: var(--space-4); aspect-ratio: 21/9; }
+@media (max-width: 900px) {
+  .case-lead { grid-template-columns: 1fr; }
+  .case-lead-visual { order: -1; aspect-ratio: 16/10; }
+  .case-grid { grid-template-columns: 1fr; gap: var(--space-8); }
 }
 
 /* ---------- 13. Process ---------- */
@@ -1038,9 +1064,6 @@ section { position: relative; }
     -webkit-mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
     mask: radial-gradient(70% 46% at 50% 26%, transparent 30%, #000 78%);
   }
-  .case-body { grid-template-columns: 1fr; }
-  .case-visual { order: -1; aspect-ratio: 16/10; }
-  .case-card { grid-template-columns: 40px 1fr; }
   .process-item { grid-template-columns: 40px 1fr; }
   .cs-outcome-grid { grid-template-columns: 1fr; }
   .cs-hero-meta { grid-template-columns: 1fr 1fr; }
