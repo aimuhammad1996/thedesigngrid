@@ -49,12 +49,6 @@
   var lastY = window.scrollY;
   var ticking = false;
 
-  /* Hero weave scroll-direction: tiny, threshold-gated, only writes to the
-     DOM when direction actually flips — piggybacks on the existing
-     rAF-throttled scroll loop below rather than adding a second listener. */
-  var scrollDir = 'up';
-  var SCROLL_DIR_THRESHOLD = 4;
-
   function updateNavHeight() {
     if (nav) root.style.setProperty('--nav-h', nav.offsetHeight + 'px');
   }
@@ -63,14 +57,6 @@
 
   function onScroll() {
     var y = window.scrollY;
-    var dy = y - lastY;
-    if (Math.abs(dy) > SCROLL_DIR_THRESHOLD) {
-      var dir = dy > 0 ? 'down' : 'up';
-      if (dir !== scrollDir) {
-        scrollDir = dir;
-        root.setAttribute('data-scroll-dir', dir);
-      }
-    }
     if (nav) {
       nav.classList.toggle('is-scrolled', y > 8);
       if (y > lastY && y > 160) {
@@ -207,6 +193,40 @@
       btn.addEventListener('mouseleave', function () {
         btn.style.transform = '';
       });
+    });
+  }
+
+  /* ---------- Hero bento parallax (desktop, motion-respecting) ----------
+     Tiles drift a few pixels toward the cursor, scaled per-tile by
+     data-depth, on a single rAF-throttled listener over the whole group. */
+  var bentoGroup = document.querySelector('[data-parallax-group]');
+  if (bentoGroup && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    var bentoTiles = Array.prototype.slice.call(bentoGroup.querySelectorAll('.bento-tile'));
+    var bentoTicking = false;
+    var bentoClientX = 0;
+    var bentoClientY = 0;
+    function applyBentoParallax() {
+      var rect = bentoGroup.getBoundingClientRect();
+      var px = (bentoClientX - rect.left) / rect.width - 0.5;
+      var py = (bentoClientY - rect.top) / rect.height - 0.5;
+      bentoTiles.forEach(function (tile) {
+        var depth = parseFloat(tile.getAttribute('data-depth')) || 0.5;
+        var tx = (px * depth * 22).toFixed(2);
+        var ty = (py * depth * 16).toFixed(2);
+        tile.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
+      });
+      bentoTicking = false;
+    }
+    bentoGroup.addEventListener('mousemove', function (e) {
+      bentoClientX = e.clientX;
+      bentoClientY = e.clientY;
+      if (!bentoTicking) {
+        window.requestAnimationFrame(applyBentoParallax);
+        bentoTicking = true;
+      }
+    });
+    bentoGroup.addEventListener('mouseleave', function () {
+      bentoTiles.forEach(function (tile) { tile.style.transform = ''; });
     });
   }
 

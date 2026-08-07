@@ -67,9 +67,25 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="top">
-    <div class="hero-weave" aria-hidden="true">
-      <svg class="hero-weave-svg" viewBox="0 0 1920 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke-linecap="round">
-        <g class="wv-a">
+    <div class="hero-bento" data-parallax-group>
+      <div class="bento-row bento-row--top">
+        <div class="bento-tile bento-tile--headline" data-reveal data-depth="0.5">
+          <p class="eyebrow no-rule">Senior Product Designer — Banking, Platforms &amp; Startups</p>
+          <h1 class="hero-headline text-balance">I design for startups that let the design do the talking.</h1>
+        </div>
+
+        <figure class="bento-tile bento-tile--portrait" data-reveal style="transition-delay:80ms;" data-depth="1">
+          <span class="portrait-fallback" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none"><path d="M8 29V11l12 13 12-13v18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="11" r="3" fill="var(--c-accent)"/></svg>
+          </span>
+          <img src="assets/portrait.jpg" alt="Muhammad Shahid, Senior Product Designer" fetchpriority="high" onerror="this.style.display='none'">
+        </figure>
+      </div>
+
+      <div class="bento-row bento-row--bottom">
+        <div class="bento-tile bento-tile--weave" data-reveal style="transition-delay:140ms;" data-depth="0.35" aria-hidden="true">
+          <svg class="hero-weave-svg" viewBox="0 0 1920 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true" fill="none" stroke-linecap="round">
+            <g class="wv-a">
           <path d="M -400 236.2 C 576 -23.5, 1306 0.0, 2320 252.2" stroke="var(--wv1)" stroke-width="1.32" stroke-opacity="0.46"/>
           <path d="M -400 242.8 C 576 -16.3, 1306 5.8, 2320 258.8" stroke="var(--wv2)" stroke-width="1.69" stroke-opacity="0.55"/>
           <path d="M -400 249.2 C 576 -9.2, 1306 11.7, 2320 265.2" stroke="var(--wv3)" stroke-width="1.81" stroke-opacity="0.75"/>
@@ -139,30 +155,29 @@
           <path d="M -400 38.8 C 576 155.3, 1306 338.2, 2320 246.8" stroke="var(--wv3)" stroke-width="1.49" stroke-opacity="0.49"/>
           <path d="M -400 45.2 C 576 163.0, 1306 343.5, 2320 253.2" stroke="var(--wv4)" stroke-width="1.71" stroke-opacity="0.48"/>
         </g>
-      </svg>
-    </div>
-    <div class="wrap hero-grid">
-      <div class="hero-copy" data-reveal>
-        <p class="eyebrow hero-kicker no-rule">Senior Product Designer — Banking, Platforms &amp; Startups</p>
-        <h1 class="hero-headline text-balance">I design for startups that let the design do the talking.</h1>
-        <div class="hero-actions">
-          <a class="btn" href="#contact" data-magnetic>
-            Let's talk
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="text-link" href="#work">
-            View case studies
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
+          </svg>
+          <span class="bento-tile-label">Toronto, Canada</span>
         </div>
-        <p class="hero-meta-line"><span>Toronto, Canada</span><span>5+ years in product design</span><span>Open to new opportunities</span></p>
+
+        <a class="bento-tile bento-tile--cta btn" href="#contact" data-reveal style="transition-delay:180ms;" data-depth="0.85">
+          <span class="bento-tile-kicker">Get in touch</span>
+          <span class="bento-tile-cta-label">Let's talk
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+
+        <a class="bento-tile bento-tile--work" href="#work" data-reveal style="transition-delay:220ms;" data-depth="0.65">
+          <span class="bento-tile-kicker">Featured work</span>
+          <span class="bento-tile-cta-label">View case studies
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </a>
+
+        <div class="bento-tile bento-tile--meta" data-reveal style="transition-delay:260ms;" data-depth="0.45">
+          <p><span class="bento-meta-num">5+</span> years in product design</p>
+          <p class="bento-meta-faint">Open to new opportunities</p>
+        </div>
       </div>
-      <figure class="hero-portrait" data-reveal style="transition-delay:120ms;">
-        <span class="portrait-fallback" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none"><path d="M8 29V11l12 13 12-13v18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="11" r="3" fill="var(--c-accent)"/></svg>
-        </span>
-        <img src="assets/portrait.jpg" alt="Muhammad Shahid, Senior Product Designer" fetchpriority="high" onerror="this.style.display='none'">
-      </figure>
     </div>
     <a class="hero-scrollcue" href="#about">
       Scroll to explore
