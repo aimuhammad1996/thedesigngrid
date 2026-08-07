@@ -495,17 +495,51 @@ section { position: relative; }
 
 /* ---------- 8. Hero — masonry work gallery ----------
    Not a statement-plus-photo hero: an irregular gallery of tiles (intro,
-   portrait, work previews, the weave motif, a quick fact) laid out in CSS
-   columns so heights vary organically, no card chrome, no borders — the
-   page opens straight into the work instead of a boxed composition. On
-   desktop, tiles drift a few pixels toward the cursor (parallax, depth-
-   scaled per tile — see main.js); inert on touch and reduced-motion. */
+   portrait, clickable work previews, a quick fact, an archive teaser) laid
+   out in CSS columns so heights vary organically, no card chrome, no
+   borders — the page opens straight into the work instead of a boxed
+   composition. The converging/diverging weave animation runs full-bleed
+   behind the whole grid, showing through the gaps between tiles and behind
+   the transparent text tiles — masked so it stays quiet behind the
+   headline. On desktop, tiles drift a few pixels toward the cursor
+   (parallax, depth-scaled per tile — see main.js); inert on touch and
+   reduced-motion. .hero itself clips overflow so the oversized weave art
+   never causes horizontal scroll at any breakpoint. */
 .hero {
   padding-top: clamp(6.5rem, 8vw, 8rem);
   padding-bottom: clamp(2.5rem, 4vw, 4rem);
   background: var(--hero-bg);
   position: relative;
+  overflow: hidden;
 }
+.hero-weave-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: var(--weave-opacity);
+  -webkit-mask: radial-gradient(46% 55% at 20% 24%, transparent 20%, #000 68%);
+  mask: radial-gradient(46% 55% at 20% 24%, transparent 20%, #000 68%);
+  pointer-events: none;
+}
+.hero-weave-bg .hero-weave-svg {
+  --wv1: var(--weave-gold-1); --wv2: var(--weave-gold-2);
+  --wv3: var(--weave-gold-3); --wv4: var(--weave-gold-2);
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hero-weave-bg .wv-a { animation: weave-drift-a var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
+.hero-weave-bg .wv-b { animation: weave-drift-b var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
+@keyframes weave-drift-a {
+  0%, 100% { transform: translate(-70px, -8px); }
+  50%      { transform: translate( 70px,  8px); }
+}
+@keyframes weave-drift-b {
+  0%, 100% { transform: translate( 70px,  8px); }
+  50%      { transform: translate(-70px, -8px); }
+}
+
 .hero-mosaic {
   position: relative;
   z-index: 1;
@@ -514,8 +548,11 @@ section { position: relative; }
 }
 .hero-tile {
   position: relative;
+  display: block;
   break-inside: avoid;
   margin-bottom: var(--space-5);
+  text-decoration: none;
+  color: inherit;
   transition: transform 380ms var(--ease-out);
   will-change: transform;
 }
@@ -538,7 +575,7 @@ section { position: relative; }
 }
 .hero-tile-actions { margin-top: var(--space-5); display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
 
-.hero-tile--portrait, .hero-tile--preview, .hero-tile--weave {
+.hero-tile--portrait, .hero-tile--preview {
   border-radius: var(--radius-m);
   overflow: hidden;
 }
@@ -553,61 +590,64 @@ section { position: relative; }
 .hero-tile--preview { aspect-ratio: 5/4; background: var(--c-bg-sunken); }
 .hero-tile--preview.hero-tile--tall { aspect-ratio: 4/5; }
 .hero-tile--preview svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
-.hero-tile--preview:hover svg { transform: scale(1.04); }
-.hero-tile-caption {
-  display: block;
-  margin-top: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: var(--fs-body-xs);
-  color: var(--c-ink-faint);
-}
-
-.hero-tile--weave {
-  aspect-ratio: 16/8;
-  background: var(--c-bg-sunken);
+.hero-tile--preview:hover svg, .hero-tile--preview:focus-visible svg { transform: scale(1.04); }
+.hero-tile-overlay {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: flex-end;
   padding: var(--space-4);
+  background: linear-gradient(to top, rgba(8, 6, 2, 0.78) 0%, rgba(8, 6, 2, 0.15) 60%, transparent 100%);
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-premium);
 }
-.hero-tile--weave .hero-weave-svg {
-  --wv1: var(--weave-gold-1); --wv2: var(--weave-gold-2);
-  --wv3: var(--weave-gold-3); --wv4: var(--weave-gold-2);
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: var(--weave-opacity);
-}
-.hero-tile--weave .wv-a { animation: weave-drift-a var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
-.hero-tile--weave .wv-b { animation: weave-drift-b var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
-@keyframes weave-drift-a {
-  0%, 100% { transform: translate(-70px, -8px); }
-  50%      { transform: translate( 70px,  8px); }
-}
-@keyframes weave-drift-b {
-  0%, 100% { transform: translate( 70px,  8px); }
-  50%      { transform: translate(-70px, -8px); }
-}
-.hero-tile-label {
-  position: relative;
-  z-index: 1;
+.hero-tile--preview:hover .hero-tile-overlay,
+.hero-tile--preview:focus-visible .hero-tile-overlay { opacity: 1; }
+.hero-tile-caption {
   font-family: var(--font-mono);
   font-size: var(--fs-body-xs);
   letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--c-ink-faint);
+  color: #F5EEDD;
 }
 
 .hero-tile--meta { padding-block: var(--space-4); }
 .hero-tile--meta p { font-size: var(--fs-body-s); color: var(--c-ink-soft); }
+.hero-meta-location {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-ink-faint) !important;
+  margin-bottom: var(--space-3);
+}
 .hero-meta-num { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-display-s); color: var(--c-ink); display: block; margin-bottom: var(--space-1); }
 .hero-meta-faint { color: var(--c-ink-faint); font-size: var(--fs-body-xs); }
+
+.hero-tile--archive {
+  padding: var(--space-5);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--radius-m);
+}
+.hero-tile-archive-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-weight: 600;
+  transition: color var(--dur-base) var(--ease-premium);
+}
+.hero-tile-archive-label svg { width: 15px; height: 15px; transition: transform var(--dur-base) var(--ease-premium); }
+.hero-tile--archive:hover { border-color: var(--c-accent); }
+.hero-tile--archive:hover .hero-tile-archive-label { color: var(--c-accent); }
+.hero-tile--archive:hover .hero-tile-archive-label svg { transform: translate(3px, -3px); }
 
 .hero-scrollcue {
   position: relative;
   z-index: 1;
   margin-top: var(--space-6);
-  display: inline-flex;
+  margin-inline: auto;
+  width: fit-content;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
@@ -631,6 +671,10 @@ section { position: relative; }
   .hero { padding-top: max(clamp(6rem, 15vw, 7.5rem), calc(var(--nav-h, 5rem) + var(--space-5))); }
   .hero-mosaic { column-count: 2; }
   .hero-tile--intro { column-span: all; }
+  .hero-weave-bg {
+    -webkit-mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
+    mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
+  }
 }
 @media (max-width: 520px) {
   .hero-mosaic { column-count: 1; }
