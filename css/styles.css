@@ -589,15 +589,26 @@ section { position: relative; }
 
 .hero-tile--preview { aspect-ratio: 5/4; background: var(--c-bg-sunken); }
 .hero-tile--preview.hero-tile--tall { aspect-ratio: 4/5; }
-.hero-tile--preview svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
-.hero-tile--preview:hover svg, .hero-tile--preview:focus-visible svg { transform: scale(1.04); }
+.hero-tile--preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 40%;
+  transition: transform var(--dur-slower) var(--ease-premium);
+}
+.hero-tile--preview:hover img, .hero-tile--preview:focus-visible img { transform: scale(1.04); }
+/* Solid near-black scrim (not a light tint) so the caption stays legible at
+   AA contrast regardless of what's underneath — verified against both the
+   darkest (TD Bank, near-black) and lightest (MyConferenceSuite, cream)
+   source photos before shipping. */
 .hero-tile-overlay {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: flex-end;
   padding: var(--space-4);
-  background: linear-gradient(to top, rgba(8, 6, 2, 0.78) 0%, rgba(8, 6, 2, 0.15) 60%, transparent 100%);
+  background: linear-gradient(to top, rgba(6, 5, 2, 0.92) 0%, rgba(6, 5, 2, 0.55) 45%, transparent 100%);
   opacity: 0;
   transition: opacity var(--dur-base) var(--ease-premium);
 }
@@ -825,8 +836,10 @@ section { position: relative; }
   overflow: hidden;
   background: var(--c-bg-sunken);
 }
-.case-lead-visual svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
-.case-lead:hover .case-lead-visual svg { transform: scale(1.035); }
+.case-lead-visual svg,
+.case-lead-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-lead:hover .case-lead-visual svg,
+.case-lead:hover .case-lead-visual img { transform: scale(1.035); }
 
 /* Supporting case studies — compact 3-up, clearly lighter weight than the lead */
 .case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
@@ -838,8 +851,10 @@ section { position: relative; }
   background: var(--c-bg-sunken);
   margin-bottom: var(--space-5);
 }
-.case-compact-visual svg { width: 100%; height: 100%; transition: transform var(--dur-slower) var(--ease-premium); }
-.case-card-compact:hover .case-compact-visual svg { transform: scale(1.045); }
+.case-compact-visual svg,
+.case-compact-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-card-compact:hover .case-compact-visual svg,
+.case-card-compact:hover .case-compact-visual img { transform: scale(1.045); }
 .case-card-compact .case-index { font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
 .case-card-compact .case-tags { margin-top: var(--space-3); }
 .case-card-compact h4 { margin-top: var(--space-3); font-size: var(--fs-body-l); transition: color var(--dur-base) var(--ease-premium); }
@@ -1018,6 +1033,7 @@ section { position: relative; }
 .cs-hero-meta dd { margin-top: var(--space-2); font-weight: 600; }
 .cs-cover { margin-top: var(--space-8); border-radius: var(--radius-l); overflow: hidden; aspect-ratio: 16/9; background: var(--c-bg-sunken); }
 .cs-cover svg { width: 100%; height: 100%; }
+.cs-cover img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; }
 
 .cs-body { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-9); align-items: start; }
 .cs-toc { position: sticky; top: 7rem; display: flex; flex-direction: column; gap: var(--space-3); }
