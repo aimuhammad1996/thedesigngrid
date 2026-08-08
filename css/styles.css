@@ -543,21 +543,60 @@ section { position: relative; }
 .hero-mosaic {
   position: relative;
   z-index: 1;
-  column-count: 4;
-  column-gap: var(--space-5);
+  /* No max-width cap of its own (beyond .wrap's) — at every viewport the
+     grid reaches all the way to the gutter on both sides instead of
+     leaving a wide strip of bare animated background exposed either side
+     of a centered column. */
+  max-width: none;
 }
 .hero-tile {
   position: relative;
   display: block;
-  break-inside: avoid;
-  margin-bottom: var(--space-5);
   text-decoration: none;
   color: inherit;
   transition: transform 380ms var(--ease-out);
   will-change: transform;
 }
 
-.hero-tile--intro { padding-block: var(--space-4); }
+/* Top row: statement + portrait + quick-fact + archive teaser, in a fixed
+   3-column grid so the right-hand tiles start flush with the top of the
+   row (not wherever a masonry algorithm happens to drop them). */
+.hero-mosaic-top {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--space-4);
+}
+.hero-tile--intro { grid-column: 1; grid-row: 1 / 3; }
+.hero-tile--portrait { grid-column: 2; grid-row: 1 / 3; }
+.hero-tile--meta { grid-column: 3; grid-row: 1; }
+.hero-tile--archive { grid-column: 3; grid-row: 2; }
+
+/* Work-preview row: real product screenshots at their native aspect ratio
+   (set inline per tile, matched exactly to the source image) — "true to
+   fit" sizing, never cropped, so every word of the cover art is legible. */
+.hero-mosaic-work {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* Text-only tiles sit directly over the animated weave background (by
+   design — the weave should read through the gaps), so they get a
+   translucent, blurred scrim behind their content — same token the nav
+   bar already uses for the same problem — to keep text legible without
+   touching the animation itself. */
+.hero-tile--intro,
+.hero-tile--meta,
+.hero-tile--archive {
+  background: var(--c-nav-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-m);
+}
+
+.hero-tile--intro { padding: var(--space-5); display: flex; flex-direction: column; justify-content: center; }
 .hero-headline {
   margin-top: var(--space-4);
   max-width: 13ch;
@@ -587,41 +626,19 @@ section { position: relative; }
 .portrait-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(234, 246, 250, 0.85); }
 .portrait-fallback svg { width: 64px; height: 64px; }
 
-.hero-tile--preview { aspect-ratio: 5/4; background: var(--c-bg-sunken); }
-.hero-tile--preview.hero-tile--tall { aspect-ratio: 4/5; }
+/* aspect-ratio is set inline per tile (matched to each source image), so
+   the box is never taller/shorter than the true image — no cropping. */
+.hero-tile--preview { background: var(--c-bg-sunken); }
 .hero-tile--preview img {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
-  object-position: 50% 40%;
+  object-fit: contain;
   transition: transform var(--dur-slower) var(--ease-premium);
 }
-.hero-tile--preview:hover img, .hero-tile--preview:focus-visible img { transform: scale(1.04); }
-/* Solid near-black scrim (not a light tint) so the caption stays legible at
-   AA contrast regardless of what's underneath — verified against both the
-   darkest (TD Bank, near-black) and lightest (MyConferenceSuite, cream)
-   source photos before shipping. */
-.hero-tile-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  padding: var(--space-4);
-  background: linear-gradient(to top, rgba(6, 5, 2, 0.92) 0%, rgba(6, 5, 2, 0.55) 45%, transparent 100%);
-  opacity: 0;
-  transition: opacity var(--dur-base) var(--ease-premium);
-}
-.hero-tile--preview:hover .hero-tile-overlay,
-.hero-tile--preview:focus-visible .hero-tile-overlay { opacity: 1; }
-.hero-tile-caption {
-  font-family: var(--font-mono);
-  font-size: var(--fs-body-xs);
-  letter-spacing: var(--tracking-wide);
-  color: #F5EEDD;
-}
+.hero-tile--preview:hover img, .hero-tile--preview:focus-visible img { transform: scale(1.02); }
 
-.hero-tile--meta { padding-block: var(--space-4); }
+.hero-tile--meta { padding: var(--space-5); }
 .hero-tile--meta p { font-size: var(--fs-body-s); color: var(--c-ink-soft); }
 .hero-meta-location {
   font-family: var(--font-mono);
@@ -675,20 +692,25 @@ section { position: relative; }
 @keyframes hero-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @media (prefers-reduced-motion: reduce) { .hero-scrollcue svg { animation: none; } }
 
-@media (max-width: 1100px) {
-  .hero-mosaic { column-count: 3; }
-}
-@media (max-width: 780px) {
+@media (max-width: 900px) {
   .hero { padding-top: max(clamp(6rem, 15vw, 7.5rem), calc(var(--nav-h, 5rem) + var(--space-5))); }
-  .hero-mosaic { column-count: 2; }
-  .hero-tile--intro { column-span: all; }
+  .hero-mosaic-top {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .hero-tile--intro { grid-column: 1 / 3; grid-row: 1; }
+  .hero-tile--portrait { grid-column: 1; grid-row: 2; }
+  .hero-tile--meta { grid-column: 2; grid-row: 2; }
+  .hero-tile--archive { grid-column: 1 / 3; grid-row: 3; }
   .hero-weave-bg {
     -webkit-mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
     mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
   }
 }
-@media (max-width: 520px) {
-  .hero-mosaic { column-count: 1; }
+@media (max-width: 640px) {
+  .hero-mosaic-top { grid-template-columns: 1fr; }
+  .hero-tile--intro, .hero-tile--portrait, .hero-tile--meta, .hero-tile--archive { grid-column: 1; grid-row: auto; }
+  .hero-mosaic-work { grid-template-columns: 1fr; }
 }
 
 .weave-divider {
@@ -837,7 +859,7 @@ section { position: relative; }
   background: var(--c-bg-sunken);
 }
 .case-lead-visual svg,
-.case-lead-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-lead-visual img { width: 100%; height: 100%; display: block; object-fit: contain; transition: transform var(--dur-slower) var(--ease-premium); }
 .case-lead:hover .case-lead-visual svg,
 .case-lead:hover .case-lead-visual img { transform: scale(1.035); }
 
@@ -852,7 +874,7 @@ section { position: relative; }
   margin-bottom: var(--space-5);
 }
 .case-compact-visual svg,
-.case-compact-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; transition: transform var(--dur-slower) var(--ease-premium); }
+.case-compact-visual img { width: 100%; height: 100%; display: block; object-fit: contain; transition: transform var(--dur-slower) var(--ease-premium); }
 .case-card-compact:hover .case-compact-visual svg,
 .case-card-compact:hover .case-compact-visual img { transform: scale(1.045); }
 .case-card-compact .case-index { font-family: var(--font-mono); font-size: var(--fs-body-xs); color: var(--c-ink-faint); }
@@ -883,7 +905,7 @@ section { position: relative; }
 
 @media (max-width: 900px) {
   .case-lead { grid-template-columns: 1fr; }
-  .case-lead-visual { order: -1; aspect-ratio: 16/10; }
+  .case-lead-visual { order: -1; }
   .case-grid { grid-template-columns: 1fr; gap: var(--space-8); }
 }
 
@@ -1033,7 +1055,7 @@ section { position: relative; }
 .cs-hero-meta dd { margin-top: var(--space-2); font-weight: 600; }
 .cs-cover { margin-top: var(--space-8); border-radius: var(--radius-l); overflow: hidden; aspect-ratio: 16/9; background: var(--c-bg-sunken); }
 .cs-cover svg { width: 100%; height: 100%; }
-.cs-cover img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 50% 40%; }
+.cs-cover img { width: 100%; height: 100%; display: block; object-fit: contain; background: var(--c-bg-sunken); }
 
 .cs-body { display: grid; grid-template-columns: 200px 1fr; gap: var(--space-9); align-items: start; }
 .cs-toc { position: sticky; top: 7rem; display: flex; flex-direction: column; gap: var(--space-3); }
