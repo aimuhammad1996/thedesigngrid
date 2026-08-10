@@ -574,12 +574,14 @@ section { position: relative; }
 
 /* Work-preview row: real product screenshots at their native aspect ratio
    (set inline per tile, matched exactly to the source image) — "true to
-   fit" sizing, never cropped, so every word of the cover art is legible. */
+   fit" sizing, never cropped. Four across at moderate size (not two giant
+   half-width banners) so the whole row is scannable and hoverable without
+   scrolling. */
 .hero-mosaic-work {
   margin-top: var(--space-4);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
 }
 
 /* Text-only tiles sit directly over the animated weave background (by
@@ -702,6 +704,7 @@ section { position: relative; }
   .hero-tile--portrait { grid-column: 1; grid-row: 2; }
   .hero-tile--meta { grid-column: 2; grid-row: 2; }
   .hero-tile--archive { grid-column: 1 / 3; grid-row: 3; }
+  .hero-mosaic-work { grid-template-columns: 1fr 1fr; }
   .hero-weave-bg {
     -webkit-mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
     mask: radial-gradient(70% 40% at 50% 14%, transparent 25%, #000 75%);
