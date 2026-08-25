@@ -598,15 +598,28 @@ section { position: relative; }
   opacity: var(--weave-opacity);
   pointer-events: none;
 }
-.hero-weave-bg .hero-weave-svg {
+/* Full-page variant: fixed to the viewport (not a section), sitting
+   behind all normal in-flow content via a negative z-index, so it reads
+   as ambient motion for as long as the visitor is on the page — not
+   just something that happens once during a hero section's scroll. */
+.page-weave-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  opacity: var(--weave-opacity);
+  pointer-events: none;
+}
+.hero-weave-bg .hero-weave-svg,
+.page-weave-bg .hero-weave-svg {
   --wv1: var(--weave-gold-1); --wv2: var(--weave-gold-2);
   --wv3: var(--weave-gold-3); --wv4: var(--weave-gold-2);
   width: 100%;
   height: 100%;
   display: block;
 }
-.hero-weave-bg .wv-a { animation: weave-drift-a var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
-.hero-weave-bg .wv-b { animation: weave-drift-b var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
+.hero-weave-bg .wv-a, .page-weave-bg .wv-a { animation: weave-drift-a var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
+.hero-weave-bg .wv-b, .page-weave-bg .wv-b { animation: weave-drift-b var(--weave-flow-speed) var(--ease-in-out) infinite; will-change: transform; }
 @keyframes weave-drift-a {
   0%, 100% { transform: translate(-70px, -8px); }
   50%      { transform: translate( 70px,  8px); }
@@ -1294,20 +1307,92 @@ body.custom-cursor-active select { cursor: auto; }
   animation: tron-pulse 550ms var(--ease-out) forwards;
 }
 @keyframes tron-pulse { to { transform: scale(2.6); opacity: 0; } }
+
+/* De-res burst on click — small squares scatter outward from the
+   click point and shrink to nothing, like a TRON program derezzing
+   into voxels. The shockwave ring above is the flash; these are the
+   debris. Position is set via --x/--y (click point) and --dx/--dy
+   (per-fragment scatter distance), both assigned inline per fragment. */
+.tron-derez-pixel {
+  position: fixed;
+  top: 0; left: 0;
+  background: var(--c-accent);
+  box-shadow: 0 0 8px 1px var(--c-accent);
+  pointer-events: none;
+  z-index: 997;
+  animation: tron-derez 560ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes tron-derez {
+  0%   { transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  35%  { opacity: 1; }
+  100% { transform: translate3d(calc(var(--x) + var(--dx)), calc(var(--y) + var(--dy)), 0) translate(-50%, -50%) scale(0.15) rotate(160deg); opacity: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .tron-cursor-dot, .tron-cursor-ring, .tron-cursor-pulse { display: none; }
+  .tron-cursor-dot, .tron-cursor-ring, .tron-cursor-pulse, .tron-derez-pixel { display: none; }
 }
 
 /* ---------- 21. Side projects ---------- */
 .project-list { display: flex; flex-direction: column; }
 .project-card {
+  position: relative;
   display: block;
   padding-block: var(--space-7);
   border-top: 1px solid var(--c-border);
   text-decoration: none;
   color: inherit;
+  overflow: hidden;
 }
 .project-list .project-card:last-child { border-bottom: 1px solid var(--c-border); }
+
+/* A gold scanline sweeps across each card once, the moment it reveals
+   on scroll — a "materializing" beat instead of a plain fade-in. Reuses
+   the existing .js-reveal/.is-visible reveal system, no JS changes. */
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg,
+    transparent 40%,
+    color-mix(in srgb, var(--c-accent) 16%, transparent) 50%,
+    transparent 60%);
+  transform: translateX(-140%);
+  opacity: 0;
+  pointer-events: none;
+}
+.js-reveal .project-card[data-reveal].is-visible::after {
+  animation: project-card-scan 1000ms var(--ease-out) 150ms forwards;
+}
+@keyframes project-card-scan {
+  0% { transform: translateX(-140%); opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateX(140%); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card::after { display: none; }
+}
+
+/* A quiet corner-bracket HUD frame that draws in on hover — reinforces
+   the "select a project" feel without relying on the scan alone. */
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid color-mix(in srgb, var(--c-accent) 0%, transparent);
+  border-image: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-premium);
+  background:
+    linear-gradient(var(--c-accent), var(--c-accent)) left top / 14px 1px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left top / 1px 14px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right top / 14px 1px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right top / 1px 14px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left bottom / 14px 1px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left bottom / 1px 14px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right bottom / 14px 1px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right bottom / 1px 14px no-repeat;
+}
+.project-card:hover::before, .project-card:focus-visible::before { opacity: 0.8; }
 .project-card-head {
   display: flex;
   justify-content: space-between;
