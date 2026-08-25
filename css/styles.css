@@ -666,7 +666,7 @@ section { position: relative; }
 }
 .hero-tile--preview:hover img, .hero-tile--preview:focus-visible img { transform: scale(1.02); }
 
-.hero-tile--meta { padding: var(--space-5); }
+.hero-tile--meta { padding: var(--space-5); display: flex; flex-direction: column; justify-content: center; }
 .hero-tile--meta p { font-size: var(--fs-body-s); color: var(--c-ink-soft); }
 .hero-meta-location {
   font-family: var(--font-mono);
@@ -683,6 +683,9 @@ section { position: relative; }
   padding: var(--space-5);
   border: 1px solid var(--c-border-strong);
   border-radius: var(--radius-m);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .hero-tile-archive-label {
   display: flex;
