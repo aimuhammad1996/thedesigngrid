@@ -256,6 +256,27 @@
       pulse.style.transform = 'translate3d(' + cursorX + 'px,' + cursorY + 'px,0)';
       document.body.appendChild(pulse);
       pulse.addEventListener('animationend', function () { pulse.remove(); });
+
+      /* De-res burst: a dozen-plus tiny squares scatter outward from the
+         click point and shrink away, like a TRON program derezzing. */
+      var derezCount = 16;
+      for (var i = 0; i < derezCount; i++) {
+        var frag = document.createElement('div');
+        frag.className = 'tron-derez-pixel';
+        var angle = (Math.PI * 2 * i) / derezCount + (Math.random() * 0.5 - 0.25);
+        var dist = 22 + Math.random() * 50;
+        var dx = Math.cos(angle) * dist;
+        var dy = Math.sin(angle) * dist;
+        var size = 4 + Math.round(Math.random() * 4);
+        frag.style.width = size + 'px';
+        frag.style.height = size + 'px';
+        frag.style.setProperty('--x', cursorX + 'px');
+        frag.style.setProperty('--y', cursorY + 'px');
+        frag.style.setProperty('--dx', dx.toFixed(1) + 'px');
+        frag.style.setProperty('--dy', dy.toFixed(1) + 'px');
+        document.body.appendChild(frag);
+        frag.addEventListener('animationend', function () { this.remove(); });
+      }
     });
     document.addEventListener('mouseup', function () { cursorRing.classList.remove('is-down'); });
   }
@@ -322,4 +343,35 @@
       history.pushState(null, '', '#' + id);
     });
   });
+
+  /* ---------- Decode-in text (opt-in via [data-decode-text]) ----------
+     Scrambles a heading's characters and resolves them left-to-right on
+     load, like a terminal decrypting a line of text. Off entirely under
+     reduced motion — the final text is already in the DOM, so skipping
+     the effect just leaves it as-is. */
+  var decodeEls = document.querySelectorAll('[data-decode-text]');
+  if (decodeEls.length && !reduceMotion) {
+    var DECODE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    decodeEls.forEach(function (el) {
+      var finalText = el.textContent;
+      var len = finalText.length;
+      var totalFrames = 26;
+      var frame = 0;
+      function tick() {
+        var revealCount = Math.floor((frame / totalFrames) * len);
+        var out = '';
+        for (var i = 0; i < len; i++) {
+          out += (i < revealCount || finalText[i] === ' ') ? finalText[i] : DECODE_CHARS[Math.floor(Math.random() * DECODE_CHARS.length)];
+        }
+        el.textContent = out;
+        frame++;
+        if (frame <= totalFrames) {
+          setTimeout(tick, 26);
+        } else {
+          el.textContent = finalText;
+        }
+      }
+      tick();
+    });
+  }
 })();
