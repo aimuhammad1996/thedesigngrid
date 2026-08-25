@@ -196,6 +196,70 @@
     });
   }
 
+  /* ---------- Custom cursor: TRON-style light disc (desktop, motion-respecting) ----------
+     A dot tracks the pointer exactly; a ring eases toward it a frame
+     behind, giving the disc a sense of weight and glide. Both are
+     transform-only and pointer-events:none. Grows and brightens over
+     interactive elements, fires a brief expanding pulse on click. */
+  if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    document.body.classList.add('custom-cursor-active');
+
+    var cursorDot = document.createElement('div');
+    cursorDot.className = 'tron-cursor-dot';
+    cursorDot.setAttribute('aria-hidden', 'true');
+    var cursorRing = document.createElement('div');
+    cursorRing.className = 'tron-cursor-ring';
+    cursorRing.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(cursorDot);
+    document.body.appendChild(cursorRing);
+
+    var cursorX = window.innerWidth / 2;
+    var cursorY = window.innerHeight / 2;
+    var ringX = cursorX;
+    var ringY = cursorY;
+    var cursorShown = false;
+
+    function setCursorVisible(visible) {
+      if (visible === cursorShown) return;
+      cursorShown = visible;
+      cursorDot.style.opacity = visible ? '1' : '0';
+      cursorRing.style.opacity = visible ? '1' : '0';
+    }
+
+    document.addEventListener('mousemove', function (e) {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      cursorDot.style.transform = 'translate3d(' + cursorX + 'px,' + cursorY + 'px,0)';
+      setCursorVisible(true);
+    });
+    document.addEventListener('mouseleave', function () { setCursorVisible(false); });
+    document.addEventListener('mouseenter', function () { setCursorVisible(true); });
+
+    (function driftRing() {
+      ringX += (cursorX - ringX) * 0.2;
+      ringY += (cursorY - ringY) * 0.2;
+      cursorRing.style.transform = 'translate3d(' + ringX + 'px,' + ringY + 'px,0)';
+      window.requestAnimationFrame(driftRing);
+    })();
+
+    var cursorHoverSelector = 'a, button, [data-magnetic], input, textarea, select, [role="button"]';
+    document.addEventListener('mouseover', function (e) {
+      if (e.target.closest && e.target.closest(cursorHoverSelector)) cursorRing.classList.add('is-hover');
+    });
+    document.addEventListener('mouseout', function (e) {
+      if (e.target.closest && e.target.closest(cursorHoverSelector)) cursorRing.classList.remove('is-hover');
+    });
+    document.addEventListener('mousedown', function () {
+      cursorRing.classList.add('is-down');
+      var pulse = document.createElement('div');
+      pulse.className = 'tron-cursor-pulse';
+      pulse.style.transform = 'translate3d(' + cursorX + 'px,' + cursorY + 'px,0)';
+      document.body.appendChild(pulse);
+      pulse.addEventListener('animationend', function () { pulse.remove(); });
+    });
+    document.addEventListener('mouseup', function () { cursorRing.classList.remove('is-down'); });
+  }
+
   /* ---------- Hero mosaic parallax (desktop, motion-respecting) ----------
      Tiles drift a few pixels toward the cursor, scaled per-tile by
      data-depth, on a single rAF-throttled listener over the whole group. */

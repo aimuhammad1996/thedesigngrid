@@ -1181,7 +1181,84 @@ section { position: relative; }
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 .no-scroll { overflow: hidden; }
-[data-cursor-glow] { position: fixed; width: 420px; height: 420px; border-radius: 50%; pointer-events: none; z-index: 1; opacity: 0; transition: opacity var(--dur-base); background: radial-gradient(circle, var(--c-accent-soft), transparent 70%); filter: blur(10px); mix-blend-mode: var(--glow-blend, normal); }
+/* ---------- 22. Custom cursor — TRON-style light disc ----------
+   Desktop-only (pointer:fine), motion-respecting. Two independent fixed
+   elements: a small dot that tracks the pointer exactly, and a ring that
+   eases toward it a beat behind, giving the disc weight as it glides.
+   Both transform-only (GPU-composited) and pointer-events:none so they
+   never interfere with real interaction. */
+body.custom-cursor-active,
+body.custom-cursor-active a,
+body.custom-cursor-active button,
+body.custom-cursor-active [data-magnetic] { cursor: none; }
+body.custom-cursor-active input,
+body.custom-cursor-active textarea,
+body.custom-cursor-active select { cursor: auto; }
+
+.tron-cursor-dot,
+.tron-cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity var(--dur-base) var(--ease-premium);
+}
+.tron-cursor-dot {
+  width: 6px; height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  box-shadow: 0 0 8px 1px var(--c-accent);
+}
+.tron-cursor-ring {
+  width: 36px; height: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 50%;
+  transition: opacity var(--dur-base) var(--ease-premium), width var(--dur-slow) var(--ease-premium), height var(--dur-slow) var(--ease-premium), margin var(--dur-slow) var(--ease-premium), filter var(--dur-base) var(--ease-premium);
+}
+.tron-cursor-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-accent);
+  box-shadow: 0 0 12px 0 var(--c-accent-soft), inset 0 0 10px 0 var(--c-accent-soft);
+  animation: tron-spin 6s linear infinite;
+}
+.tron-cursor-ring::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  border: 1px dashed var(--c-accent);
+  opacity: 0.55;
+  animation: tron-spin-reverse 4s linear infinite;
+}
+.tron-cursor-ring.is-hover { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
+.tron-cursor-ring.is-hover::before { animation-duration: 2.2s; box-shadow: 0 0 20px 2px var(--c-accent), inset 0 0 14px 0 var(--c-accent-soft); }
+.tron-cursor-ring.is-hover::after { animation-duration: 1.6s; }
+.tron-cursor-ring.is-down { filter: brightness(1.35); }
+@keyframes tron-spin { to { transform: rotate(360deg); } }
+@keyframes tron-spin-reverse { to { transform: rotate(-360deg); } }
+
+.tron-cursor-pulse {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  margin: -18px 0 0 -18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-accent);
+  pointer-events: none;
+  z-index: 998;
+  opacity: 0.85;
+  animation: tron-pulse 550ms var(--ease-out) forwards;
+}
+@keyframes tron-pulse { to { transform: scale(2.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .tron-cursor-dot, .tron-cursor-ring, .tron-cursor-pulse { display: none; }
+}
 
 /* ---------- 21. Side projects ---------- */
 .project-list { display: flex; flex-direction: column; }
