@@ -703,6 +703,44 @@ section { position: relative; }
     color: transparent;
   }
 }
+
+/* Typewriter reveal — see the JS comment for the accessibility pattern.
+   The visible span uses the same gold gradient text-fill as the homepage
+   hero headline, so each newly-typed character already reads as "lit up"
+   rather than plain, giving the build-up its "gradient sweep" character
+   without a separate moving overlay that could reintroduce the jitter
+   this replaced. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  [data-typewriter-visible] {
+    background: var(--g-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+.typewriter-caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  margin-left: 2px;
+  background: var(--c-accent);
+  box-shadow: 0 0 8px 1px var(--c-accent);
+  vertical-align: text-bottom;
+  animation: typewriter-blink 0.9s step-end infinite;
+}
+.typewriter-caret.is-done { animation: none; opacity: 0; transition: opacity 400ms var(--ease-premium); }
+@keyframes typewriter-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-caret { display: none; }
+}
+
+/* Opt-in "keep this text on solid ground" panel — blocks the fixed
+   page-wide weave background (see .page-weave-bg) from showing through
+   text-heavy blocks, while leaving genuinely empty space (gutters,
+   section padding) free for it to read through. Matches the page's own
+   background exactly, so it's invisible as a "box": it just stops the
+   weave, nothing more. */
+.weave-text-panel { background: var(--c-bg); }
 .hero-tile-actions { margin-top: var(--space-5); display: flex; align-items: center; gap: var(--space-5); flex-wrap: wrap; }
 
 .hero-tile--portrait, .hero-tile--preview {
@@ -1338,6 +1376,7 @@ body.custom-cursor-active select { cursor: auto; }
   display: block;
   padding-block: var(--space-7);
   border-top: 1px solid var(--c-border);
+  background: var(--c-bg);
   text-decoration: none;
   color: inherit;
   overflow: hidden;

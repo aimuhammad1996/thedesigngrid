@@ -344,34 +344,37 @@
     });
   });
 
-  /* ---------- Decode-in text (opt-in via [data-decode-text]) ----------
-     Scrambles a heading's characters and resolves them left-to-right on
-     load, like a terminal decrypting a line of text. Off entirely under
-     reduced motion — the final text is already in the DOM, so skipping
-     the effect just leaves it as-is. */
-  var decodeEls = document.querySelectorAll('[data-decode-text]');
-  if (decodeEls.length && !reduceMotion) {
-    var DECODE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    decodeEls.forEach(function (el) {
+  /* ---------- Typewriter reveal (opt-in via [data-typewriter-visible]) ----------
+     Builds a heading up left-to-right with a blinking caret, instead of
+     scrambling characters — no per-frame width jitter, since characters
+     are only ever appended, never substituted. Accessibility: the real
+     text lives permanently in a sibling .visually-hidden span (see the
+     markup) that this script never touches, so the accessible name is
+     correct and available immediately regardless of animation state or
+     whether JS runs at all. This element itself starts aria-hidden in
+     the HTML and holds the same full text as a no-JS/pre-JS fallback;
+     under reduced motion the loop below is skipped entirely and that
+     fallback text simply stays put. */
+  var typewriterEls = document.querySelectorAll('[data-typewriter-visible]');
+  if (typewriterEls.length && !reduceMotion) {
+    typewriterEls.forEach(function (el) {
       var finalText = el.textContent;
-      var len = finalText.length;
-      var totalFrames = 26;
-      var frame = 0;
-      function tick() {
-        var revealCount = Math.floor((frame / totalFrames) * len);
-        var out = '';
-        for (var i = 0; i < len; i++) {
-          out += (i < revealCount || finalText[i] === ' ') ? finalText[i] : DECODE_CHARS[Math.floor(Math.random() * DECODE_CHARS.length)];
-        }
-        el.textContent = out;
-        frame++;
-        if (frame <= totalFrames) {
-          setTimeout(tick, 26);
+      el.textContent = '';
+      var caret = document.createElement('span');
+      caret.className = 'typewriter-caret';
+      caret.setAttribute('aria-hidden', 'true');
+      el.insertAdjacentElement('afterend', caret);
+      var i = 0;
+      function typeNext() {
+        el.textContent = finalText.slice(0, i);
+        i++;
+        if (i <= finalText.length) {
+          setTimeout(typeNext, 32);
         } else {
-          el.textContent = finalText;
+          setTimeout(function () { caret.classList.add('is-done'); }, 850);
         }
       }
-      tick();
+      typeNext();
     });
   }
 })();
