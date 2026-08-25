@@ -472,17 +472,18 @@ section { position: relative; }
   width: 0%;
 }
 
-/* Slim utility strip below the main nav row — a standing pointer to work
-   outside client engagements. The link itself reads as a small HUD panel:
-   transparent base, a gold/black band sweeping slowly through it (JARVIS-
-   style), sitting clear of the nav row above on its own breathing room. */
-.nav-banner-row { border-top: 1px solid var(--c-border); }
-.nav-banner-row .wrap { display: flex; justify-content: flex-end; padding-top: var(--space-5); padding-bottom: var(--space-4); }
+/* Side/AI-projects pill, integrated directly into the nav row (not a
+   separate banner strip) — flanked by hairline dividers so it reads as
+   its own segment between the primary nav links and the icon cluster.
+   Transparent base with a gold/black band sweeping slowly through it
+   (JARVIS-style). Hidden alongside .nav-links below 780px, where its
+   mobile-panel equivalent (.mobile-nav-accent) takes over instead. */
+.nav-banner-divider { width: 1px; height: 22px; background: var(--c-border-strong); flex-shrink: 0; }
 .nav-banner-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 0.6rem 1.25rem;
+  padding: 0.5rem 0.95rem;
   border-radius: var(--radius-pill);
   border: 1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
   background: linear-gradient(115deg,
@@ -493,20 +494,20 @@ section { position: relative; }
     transparent 100%);
   background-size: 240% 100%;
   background-position: 200% 0;
-  box-shadow: 0 0 14px 0 color-mix(in srgb, var(--c-accent) 22%, transparent);
+  box-shadow: 0 0 10px 0 color-mix(in srgb, var(--c-accent) 20%, transparent);
   font-family: var(--font-mono);
-  font-size: var(--fs-body-xs);
+  font-size: 0.75rem;
   letter-spacing: var(--tracking-wide);
   color: var(--c-accent);
-  text-align: right;
+  white-space: nowrap;
   animation: nav-banner-shimmer 5s ease-in-out infinite;
   transition: color var(--dur-base) var(--ease-premium), border-color var(--dur-base) var(--ease-premium), box-shadow var(--dur-base) var(--ease-premium);
 }
-.nav-banner-link svg { width: 13px; height: 13px; flex-shrink: 0; transition: transform var(--dur-base) var(--ease-premium); }
+.nav-banner-link svg { width: 12px; height: 12px; flex-shrink: 0; transition: transform var(--dur-base) var(--ease-premium); }
 .nav-banner-link:hover, .nav-banner-link:focus-visible {
   color: var(--c-ink);
   border-color: color-mix(in srgb, var(--c-accent) 70%, transparent);
-  box-shadow: 0 0 20px 2px color-mix(in srgb, var(--c-accent) 32%, transparent);
+  box-shadow: 0 0 16px 1px color-mix(in srgb, var(--c-accent) 30%, transparent);
 }
 .nav-banner-link:hover svg, .nav-banner-link:focus-visible svg { transform: translate(3px, -3px); }
 @keyframes nav-banner-shimmer {
@@ -516,6 +517,10 @@ section { position: relative; }
 @media (prefers-reduced-motion: reduce) {
   .nav-banner-link { animation: none; background-position: 30% 0; }
 }
+
+/* Gold accent variant of the big mobile-panel nav links, for the
+   side/AI-projects entry that replaces the pill below 780px. */
+.mobile-panel a.mobile-nav-accent { color: var(--c-accent); }
 
 .mobile-panel {
   position: fixed;
@@ -1179,13 +1184,21 @@ section { position: relative; }
   .logo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 780px) {
+/* The nav collapses to the hamburger/mobile-panel pattern earlier than
+   the rest of the mobile layout kicks in — nav-links plus the integrated
+   side/AI-projects pill don't have room to coexist on one line below
+   this, and the row has no wrap of its own above 780px to fall back on. */
+@media (max-width: 1180px) {
   .nav-links { display: none; }
+  .nav-banner-divider, .nav-banner-link { display: none; }
   .nav-toggle { display: block; }
   .nav-row { flex-wrap: wrap; row-gap: var(--space-2); gap: var(--space-3); }
   .nav-actions { gap: var(--space-2); }
   .brand-mark { width: 28px; height: 28px; }
   .nav-cta { padding: 0.55rem 0.85rem; }
+}
+
+@media (max-width: 780px) {
   .about-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .contact-form-row { grid-template-columns: 1fr; }
