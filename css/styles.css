@@ -473,24 +473,49 @@ section { position: relative; }
 }
 
 /* Slim utility strip below the main nav row — a standing pointer to work
-   outside client engagements, kept quiet (mono type, hairline rule) so it
-   reads as a footnote, not a promo banner. */
+   outside client engagements. The link itself reads as a small HUD panel:
+   transparent base, a gold/black band sweeping slowly through it (JARVIS-
+   style), sitting clear of the nav row above on its own breathing room. */
 .nav-banner-row { border-top: 1px solid var(--c-border); }
-.nav-banner-row .wrap { display: flex; justify-content: flex-end; padding-block: var(--space-2); }
+.nav-banner-row .wrap { display: flex; justify-content: flex-end; padding-top: var(--space-5); padding-bottom: var(--space-4); }
 .nav-banner-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
+  background: linear-gradient(115deg,
+    transparent 0%,
+    color-mix(in srgb, var(--c-accent) 24%, transparent) 38%,
+    rgba(0, 0, 0, 0.3) 50%,
+    color-mix(in srgb, var(--c-accent) 24%, transparent) 62%,
+    transparent 100%);
+  background-size: 240% 100%;
+  background-position: 200% 0;
+  box-shadow: 0 0 14px 0 color-mix(in srgb, var(--c-accent) 22%, transparent);
   font-family: var(--font-mono);
   font-size: var(--fs-body-xs);
   letter-spacing: var(--tracking-wide);
   color: var(--c-accent);
   text-align: right;
-  transition: color var(--dur-base) var(--ease-premium);
+  animation: nav-banner-shimmer 5s ease-in-out infinite;
+  transition: color var(--dur-base) var(--ease-premium), border-color var(--dur-base) var(--ease-premium), box-shadow var(--dur-base) var(--ease-premium);
 }
 .nav-banner-link svg { width: 13px; height: 13px; flex-shrink: 0; transition: transform var(--dur-base) var(--ease-premium); }
-.nav-banner-link:hover, .nav-banner-link:focus-visible { color: var(--c-ink); }
+.nav-banner-link:hover, .nav-banner-link:focus-visible {
+  color: var(--c-ink);
+  border-color: color-mix(in srgb, var(--c-accent) 70%, transparent);
+  box-shadow: 0 0 20px 2px color-mix(in srgb, var(--c-accent) 32%, transparent);
+}
 .nav-banner-link:hover svg, .nav-banner-link:focus-visible svg { transform: translate(3px, -3px); }
+@keyframes nav-banner-shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -40% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-banner-link { animation: none; background-position: 30% 0; }
+}
 
 .mobile-panel {
   position: fixed;
