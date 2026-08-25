@@ -472,6 +472,26 @@ section { position: relative; }
   width: 0%;
 }
 
+/* Slim utility strip below the main nav row — a standing pointer to work
+   outside client engagements, kept quiet (mono type, hairline rule) so it
+   reads as a footnote, not a promo banner. */
+.nav-banner-row { border-top: 1px solid var(--c-border); }
+.nav-banner-row .wrap { display: flex; justify-content: flex-end; padding-block: var(--space-2); }
+.nav-banner-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-accent);
+  text-align: right;
+  transition: color var(--dur-base) var(--ease-premium);
+}
+.nav-banner-link svg { width: 13px; height: 13px; flex-shrink: 0; transition: transform var(--dur-base) var(--ease-premium); }
+.nav-banner-link:hover, .nav-banner-link:focus-visible { color: var(--c-ink); }
+.nav-banner-link:hover svg, .nav-banner-link:focus-visible svg { transform: translate(3px, -3px); }
+
 .mobile-panel {
   position: fixed;
   inset: 0;
@@ -1076,7 +1096,7 @@ section { position: relative; }
 .back-to-top:hover svg { transform: translateY(-3px); }
 
 /* ---------- 18. Case study detail page ---------- */
-.cs-hero { padding-top: clamp(6rem, 8vw, 7.5rem); padding-bottom: var(--space-7); }
+.cs-hero { padding-top: max(clamp(6rem, 8vw, 7.5rem), calc(var(--nav-h, 5rem) + var(--space-5))); padding-bottom: var(--space-7); }
 .cs-hero-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-8); }
 .cs-hero-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--c-border); }
 .cs-hero-meta dt { font-family: var(--font-mono); font-size: var(--fs-body-xs); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--c-ink-faint); }
@@ -1162,3 +1182,38 @@ section { position: relative; }
 }
 .no-scroll { overflow: hidden; }
 [data-cursor-glow] { position: fixed; width: 420px; height: 420px; border-radius: 50%; pointer-events: none; z-index: 1; opacity: 0; transition: opacity var(--dur-base); background: radial-gradient(circle, var(--c-accent-soft), transparent 70%); filter: blur(10px); mix-blend-mode: var(--glow-blend, normal); }
+
+/* ---------- 21. Side projects ---------- */
+.project-list { display: flex; flex-direction: column; }
+.project-card {
+  display: block;
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--c-border);
+  text-decoration: none;
+  color: inherit;
+}
+.project-list .project-card:last-child { border-bottom: 1px solid var(--c-border); }
+.project-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+.project-tags { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+.project-cta { flex-shrink: 0; }
+.project-card h3 { max-width: 34ch; transition: color var(--dur-base) var(--ease-premium); }
+.project-card:hover h3, .project-card:focus-visible h3 { color: var(--c-accent); }
+.project-card:hover .project-cta, .project-card:focus-visible .project-cta { color: var(--c-accent); }
+.project-card:hover .project-cta svg, .project-card:focus-visible .project-cta svg { transform: translate(3px, -3px); }
+.project-card p { margin-top: var(--space-3); max-width: 60ch; }
+.project-url {
+  display: block;
+  margin-top: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
