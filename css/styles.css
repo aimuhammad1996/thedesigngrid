@@ -1090,10 +1090,14 @@ section { position: relative; }
 }
 .logo-cell {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
 }
-.logo-cell svg { height: 22px; width: auto; color: var(--c-ink-faint); transition: color var(--dur-base); }
-.logo-cell:hover svg { color: var(--c-ink); }
+.logo-mark { height: 28px; width: 28px; color: var(--c-ink-faint); transition: color var(--dur-base); }
+.logo-cell:hover .logo-mark { color: var(--c-accent); }
+.logo-wordmark { height: 22px; width: auto; color: var(--c-ink-faint); transition: color var(--dur-base); }
+.logo-cell:hover .logo-wordmark { color: var(--c-ink); }
 
 .credibility-copy .about-list { margin-top: var(--space-6); }
 
